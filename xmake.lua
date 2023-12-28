@@ -1,13 +1,34 @@
 add_rules("mode.debug", "mode.release")
 set_languages("c17", "c++17")
 
-add_requires("libsdl", "opengl")
+add_requires("libsdl")
+-- add_requires("libsdl", "opengl")
+
+target("imgui")
+    set_kind("static")
+
+    add_includedirs("third_party/imgui", "third_party/imgui/backends")
+    add_files("third_party/imgui/*.cpp")
+
+-------------------------------------------------- SDL2
+    add_files("third_party/imgui/backends/imgui_impl_sdlrenderer2.cpp", "third_party/imgui/backends/imgui_impl_sdl2.cpp")
+    add_packages("libsdl")
+-------------------------------------------------- SDL2 + OpenGL3
+    -- add_files("third_party/imgui/backends/imgui_impl_opengl3.cpp", "third_party/imgui/backends/imgui_impl_sdl2.cpp")
+    -- add_packages("libsdl", "opengl")
+-------------------------------------------------- end
 
 target("test")
     set_kind("binary")
+
+    add_packages("libsdl")
+    add_deps("imgui")
+
     add_includedirs("src")
+    add_includedirs("third_party/imgui", "third_party/imgui/backends")
+
     add_files("src/*.cpp")
-    add_packages("libsdl", "opengl")
+    
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
